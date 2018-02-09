@@ -1,0 +1,4 @@
+Assignment for TCS2251 Computer Security
+---------------------
+A simple decryption script to decrypt password created using mkpasswd on Ubuntu
+For exactly 3 alphanumerical password only
