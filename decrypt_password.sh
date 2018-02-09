@@ -9,19 +9,41 @@ function find_hash_type1(){
 	if [ $HASH_TYPE_NO1 != "\$" ]; then # if first hash is not start with '$' sign
 		HASH_TYPE_NO1=0
 
-		find_hash_type2 2 # function to find the second hash hashing type
-		HASH_TYPE_NO2=$? # get the return value from function
+		# get the values from 3 to last of the first segment for encrypted key
+		ENCR1=`cat hackpair.pwd | cut -d"$" -f1 | cut -c3-13`
+		# get the first two values for salt
+		SALT1=`cat hackpair.pwd | cut -c1-2`
+
+		# declare the variable
+		HASH_TYPE_NO2=''
+		ENCR2=''
+		SALT2=''
+
+		find_hash_type2 2 HASH_TYPE_NO2 ENCR2 SALT2 # function to find the second hash hashing type
 
 	else # if first hash is start with '$' sign
 		HASH_TYPE_NO1=`cat hackpair.pwd | cut -d"$" -f2` # get the value after first '$' sign
 
-		find_hash_type2 5 # function to find the second hash hashing type
-		HASH_TYPE_NO2=$? # get the return value from function
+		# get the values between third and fourth '$' for encrypted key
+		ENCR1=`cat hackpair.pwd | cut -d"$" -f4`
+		# get the values between second and third '$' for salt
+		SALT1=`cat hackpair.pwd | cut -d"$" -f3`
+
+		# declare the variable
+		HASH_TYPE_NO2=''
+		ENCR2=''
+		SALT2=''
+
+		find_hash_type2 5 HASH_TYPE_NO2 ENCR2 SALT2 # function to find the second hash hashing type
 	fi
 
 	# return the values
 	eval $1=$HASH_TYPE_NO1 
 	eval $2=$HASH_TYPE_NO2
+	eval $3=$ENCR1
+	eval $4=$SALT1
+	eval $5=$ENCR2
+	eval $6=$SALT2
 }
 
 # function to find the second hashing type
@@ -34,12 +56,24 @@ function find_hash_type2(){
 
 	if [ -z $HASH_TYPE_NO2 ]; then # if the first index is empty
 		HASH_TYPE_NO2=`cat hackpair.pwd | cut -d"$" -f$((PARA+1))` # get the value after the first '$' sign of second fragment
+
+		# get the values between third and fourth '$' for encrypted key
+		ENCR2=`cat hackpair.pwd | cut -d"$" -f$((PARA+3))`
+		# get the first two values as salt
+		SALT2=`cat hackpair.pwd | cut -d"$" -f$((PARA+2))`
 	
 	else # if the first index is not empty
 		HASH_TYPE_NO2=0
+
+		# get the values from 3 to last of the first segment for encrypted key
+		ENCR2=`cat hackpair.pwd | cut -d"$" -f$(($PARA)) | cut -c3-13`
+		# get the values between second and third '$' as salt
+		SALT2=`cat hackpair.pwd | cut -d"$" -f$(($PARA)) | cut -c1-2`
 	fi
 
-	return $HASH_TYPE_NO2
+	eval $2=$HASH_TYPE_NO2
+	eval $3=$ENCR2
+	eval $4=$SALT2
 }
 
 # function to convert the type number to hashing name
@@ -68,8 +102,12 @@ LIST="q w e r t y u i o p a s d f g h j k l z x c v b n m Q W E R T Y U I O P A 
 # declare the variable
 HASH_TYPE_NO1=''
 HASH_TYPE_NO2=''
+ENCR1=''
+SALT1=''
+ENCR2=''
+SALT2=''
 
-find_hash_type1 HASH_TYPE_NO1 HASH_TYPE_NO2 # function to find the first hash hashing type
+find_hash_type1 HASH_TYPE_NO1 HASH_TYPE_NO2 ENCR1 SALT1 ENCR2 SALT2 # function to find the first hash hashing type
 
 # declare the variable
 HASH_TYPE1=''
@@ -79,12 +117,9 @@ HASH_TYPE2=''
 convert_hash_type $HASH_TYPE_NO1 HASH_TYPE1 
 convert_hash_type $HASH_TYPE_NO2 HASH_TYPE2
 
-# # Assign to the variable encr the encrypted password from the
-# # hijacked shadow file
-# encr=`cat hackpair.pwd | cut -d"$" -f4`
-# # Assign to the variable salt the salt used to generate the
-# # encrypted password
-# salt=`cat hackpair.pwd | cut -d"$" -f3`
+echo $ENCR1 $SALT1 $ENCR2 $SALT2
+
+
 
 # # Assuming we know that the password is 3 alphanumeric long,
 # # iterate through all possible combinations of plaintext
