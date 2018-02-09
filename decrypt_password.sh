@@ -117,29 +117,56 @@ HASH_TYPE2=''
 convert_hash_type $HASH_TYPE_NO1 HASH_TYPE1 
 convert_hash_type $HASH_TYPE_NO2 HASH_TYPE2
 
-echo $ENCR1 $SALT1 $ENCR2 $SALT2
+# Since that we know the password is exactly 3 alphanumeric long
+# iterate through all possible combinations of plaintext
+# password, encrypt it (assign it to the variable test) and
+# compare it to the encrypted password that was retrieved as
+# the variable ENCR1 and ENCR2.
+PASSWORD1=''
+PASSWORD2=''
 
+for i in $LIST; do
+	for j in $LIST; do
+		for k in $LIST; do
 
+	  		echo -n "$i$j$k "
 
-# # Assuming we know that the password is 3 alphanumeric long,
-# # iterate through all possible combinations of plaintext
-# # password, encrypt it (assign it to the variable test) and
-# # compare it to the encrypted password that was retrieved as
-# # the variable encr.
-# for i in $LIST
-#   do
-#    for j in $LIST
-#     do
-# 	for k in $LIST
-# 	 do
-# 	  	echo -n "$i$j$k "
-	   
-#   		test=`mkpasswd -m sha-512 $i$j$k -s $salt | cut -d"$" -f4`
+	  		# if the hash type is not DES, then get the values after third '$' sign
+	  		if [ $HASH_TYPE_NO1 != 0 ]; then
+				TEST1=`mkpasswd -m $HASH_TYPE1 $i$j$k -s $SALT1 | cut -d"$" -f4`
+			# if the hash type is DES, then get the values before third to thirteenth
+			else
+				TEST1=`mkpasswd -m $HASH_TYPE1 $i$j$k -s $SALT1 | cut -c3-13`
+			fi
 
-# 		if [ $test == $encr ] ; then
-# 			echo "Password is: $i$j$k"
-# 			exit
-# 		fi
-# 	  done
-# 	done
-# done
+			# if the hash type is not DES, then get the values after third '$' sign 
+			if [ $HASH_TYPE_NO2 != 0 ]; then
+				TEST2=`mkpasswd -m $HASH_TYPE2 $i$j$k -s $SALT2 | cut -d"$" -f4`
+			# if the hash type is DES, then get the values before third to thirteenth
+			else
+				TEST2=`mkpasswd -m $HASH_TYPE2 $i$j$k -s $SALT1 | cut -c3-13`
+			fi
+
+			# if the password is a match, then store the password first, if another password also found, print both password together
+			if [ $TEST1 == $ENCR1 ]; then
+				PASSWORD1=$i$j$k
+
+				if [ -n "$PASSWORD2" ]; then
+					echo "Password1 is: $PASSWORD1"
+					echo "Password2 is: $PASSWORD2"
+					exit
+				fi
+			fi
+
+			if [ $TEST2 == $ENCR2 ]; then
+				PASSWORD2=$i$j$k
+				
+				if [ -n "$PASSWORD1" ]; then
+					echo "Password1 is: $PASSWORD1"
+					echo "Password2 is: $PASSWORD2"
+					exit
+				fi
+			fi
+		done
+	done
+done
