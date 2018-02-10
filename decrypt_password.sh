@@ -147,7 +147,7 @@ for i in $LIST; do
 				TEST2=`mkpasswd -m $HASH_TYPE2 $i$j$k -s $SALT1 | cut -c3-13`
 			fi
 
-			# if the password is a match, then store the password first, if another password also found, print both password together
+			# if the password is a match, then store the password first, if another password also found, print both password together, and exit the system
 			if [ $TEST1 == $ENCR1 ]; then
 				PASSWORD1=$i$j$k
 
