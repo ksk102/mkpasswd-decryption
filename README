@@ -1,4 +1,7 @@
 Assignment for TCS2251 Computer Security
 ---------------------
-A simple decryption script to decrypt password created using mkpasswd on Ubuntu
-For exactly 3 alphanumerical password only
+A simple script to find password on the hash values created using mkpasswd on Ubuntu
+---------------------
+This script will find the passwords for 2 hash values together, 
+the hash values should be placed in a file called hackpair.pwd, the format for place the hash values in the file is hash_1$hash_2.
+The original password for each hash value should consist of three combination of alphanumerical values only.
