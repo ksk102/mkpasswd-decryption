@@ -144,7 +144,7 @@ for i in $LIST; do
 				TEST2=`mkpasswd -m $HASH_TYPE2 $i$j$k -s $SALT2 | cut -d"$" -f4`
 			# if the hash type is DES, then get the values before third to thirteenth
 			else
-				TEST2=`mkpasswd -m $HASH_TYPE2 $i$j$k -s $SALT1 | cut -c3-13`
+				TEST2=`mkpasswd -m $HASH_TYPE2 $i$j$k -s $SALT2 | cut -c3-13`
 			fi
 
 			# if the password is a match, then store the password first, if another password also found, print both password together, and exit the system
