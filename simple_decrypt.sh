@@ -21,11 +21,11 @@ for i in $LIST; do
 			test2=`mkpasswd -m sha-512 $i$j$k -s $salt2 | cut -d"$" -f4`
 
 			if [ $test1 == $encr1 ]; then
-				$password1 = $i$j$k
+				$password1=$i$j$k
 			fi
 
 			if [ $test2 == $encr2 ]; then
-				$password2 = $i$j$k
+				$password2=$i$j$k
 			fi
 
 			# print both password together only when both are found
