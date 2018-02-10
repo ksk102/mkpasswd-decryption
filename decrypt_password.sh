@@ -152,8 +152,8 @@ for i in $LIST; do
 				PASSWORD1=$i$j$k
 
 				if [ -n "$PASSWORD2" ]; then
-					echo "Password1 is: $PASSWORD1"
-					echo "Password2 is: $PASSWORD2"
+					printf "\n\nPassword1 is: $PASSWORD1\n"
+					printf "Password2 is: $PASSWORD2\n\n"
 					exit
 				fi
 			fi
@@ -162,8 +162,8 @@ for i in $LIST; do
 				PASSWORD2=$i$j$k
 				
 				if [ -n "$PASSWORD1" ]; then
-					echo "Password1 is: $PASSWORD1"
-					echo "Password2 is: $PASSWORD2"
+					printf "\n\nPassword1 is: $PASSWORD1\n"
+					printf "Password2 is: $PASSWORD2\n\n"
 					exit
 				fi
 			fi
