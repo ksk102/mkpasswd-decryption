@@ -7,6 +7,9 @@ salt1=`cat hackpair.pwd | cut -d"$" -f3` # get the salt
 encr2=`cat hackpair.pwd | cut -d"$" -f8` # get the encrypted code for 2nd hashed value
 salt2=`cat hackpair.pwd | cut -d"$" -f7` # get the salt for 2nd hashed value
 
+password1=''
+password2=''
+
 # loop each of the alphanumeric one by one
 for i in $LIST; do
 	for j in $LIST; do
@@ -16,9 +19,6 @@ for i in $LIST; do
 			# encrypt the alphanumeric to hash value, and compare with the hashed values in hackpair.pwd
 			test1=`mkpasswd -m sha-256 $i$j$k -s $salt1 | cut -d"$" -f4`
 			test2=`mkpasswd -m sha-512 $i$j$k -s $salt2 | cut -d"$" -f4`
-
-			password1=''
-			password2=''
 
 			if [ $test1 == $encr1 ]; then
 				$password1 = $i$j$k
