@@ -125,12 +125,14 @@ convert_hash_type $HASH_TYPE_NO2 HASH_TYPE2
 PASSWORD1=''
 PASSWORD2=''
 
+# loop each of the alphanumeric one by one
 for i in $LIST; do
 	for j in $LIST; do
 		for k in $LIST; do
 
 	  		echo -n "$i$j$k "
 
+	  		# encrypt the alphanumeric to hash value, and compare with the hashed values in hackpair.pwd
 	  		# if the hash type is not DES, then get the values after third '$' sign
 	  		if [ $HASH_TYPE_NO1 != 0 ]; then
 				TEST1=`mkpasswd -m $HASH_TYPE1 $i$j$k -s $SALT1 | cut -d"$" -f4`
@@ -150,22 +152,17 @@ for i in $LIST; do
 			# if the password is a match, then store the password first, if another password also found, print both password together, and exit the system
 			if [ $TEST1 == $ENCR1 ]; then
 				PASSWORD1=$i$j$k
-
-				if [ -n "$PASSWORD2" ]; then
-					printf "\n\nPassword1 is: $PASSWORD1\n"
-					printf "Password2 is: $PASSWORD2\n\n"
-					exit
-				fi
 			fi
 
 			if [ $TEST2 == $ENCR2 ]; then
 				PASSWORD2=$i$j$k
-				
-				if [ -n "$PASSWORD1" ]; then
-					printf "\n\nPassword1 is: $PASSWORD1\n"
-					printf "Password2 is: $PASSWORD2\n\n"
-					exit
-				fi
+			fi
+
+			# print both password together only when both are found
+			if [ -n "$PASSWORD1" ] && [ -n "$PASSWORD2" ]; then
+				printf "\n\nPassword1 is: $PASSWORD1\n"
+				printf "Password2 is: $PASSWORD2\n\n"
+				exit
 			fi
 		done
 	done

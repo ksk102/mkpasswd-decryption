@@ -5,3 +5,5 @@ A simple script to find password on the hash values created using mkpasswd on Ub
 This script will find the passwords for 2 hash values together, 
 the hash values should be placed in a file called hackpair.pwd, the format for place the hash values in the file is hash_1$hash_2.
 The original password for each hash value should consist of three combination of alphanumerical values only.
+
+After put in the hash values into the hackpair.pwd, run decrypt_password.sh
